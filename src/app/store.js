@@ -8,3 +8,4 @@ export const store = configureStore({
 	reducer: rootReducer,
 	middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
+//s
