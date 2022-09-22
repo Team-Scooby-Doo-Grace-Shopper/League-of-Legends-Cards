@@ -38,7 +38,7 @@ const Cart = () => {
 						{cart[0].lineItems.map((cartItem)=>{
 							totalQty += cartItem.quantity;
 							totalPrice += (Number(cartItem.product.price) * cartItem.quantity)
-
+							
 							return (
 								<div className='cart-item' key={cartItem.product.id}>
 									<div className='cart-img-name'>
