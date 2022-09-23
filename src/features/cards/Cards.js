@@ -1,25 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { fetchCards } from './cardsSlice';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../cart/cartSlice';
+import { TailSpin } from 'react-loading-icons'
 
 const Cards = () => {
 	const cards = useSelector((state) => state.cards.cards);
+	const [loading, setLoading] = useState(false);
 
 	const dispatch = useDispatch();
 
 	React.useEffect(() => {
 		dispatch(fetchCards());
+		setLoading(true)
 	}, []);
 
 	const handleAddToCart = (card) => {
 		dispatch(addToCart(card));
 	};
 
-	return !cards ? (
-		<div> Loading... </div>
-	) : (
+	return loading ? (
 		<div className="all-cards-container">
 			{cards.map((card) => (
 				<div key={card.id} className="card">
@@ -49,6 +50,10 @@ const Cards = () => {
 					<button onClick={() => handleAddToCart({productId: card.id, qty: 1})}> Add to Cart </button>
 				</div>
 			))}
+		</div>
+	) : (
+		<div className="all-cards-container">
+			<TailSpin stroke="#FF00B0" strokeWidth="3"/>
 		</div>
 	);
 };
