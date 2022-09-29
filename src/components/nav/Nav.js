@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 const Nav = () => {
 	const totalItem = useSelector((state) => state.cart.totalItems);
-	// const totalItem = 1;
+
 	React.useEffect(() => {}, [totalItem]);
 	return (
 		<div className="nav">

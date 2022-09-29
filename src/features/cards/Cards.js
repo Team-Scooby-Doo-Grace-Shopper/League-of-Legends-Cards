@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, setLoginTotal, updateOrder } from '../cart/cartSlice';
 import { getFilter } from './cardsSlice';
 import Filter from './Filter';
-import { fetchCards, changeFilter } from './cardsSlice';
+import { changeFilter } from './cardsSlice';
 import { TailSpin } from 'react-loading-icons';
 import { currencyFormat } from '../util/utils';
 const Cards = () => {
@@ -13,6 +13,7 @@ const Cards = () => {
 	const cards = useSelector((state) => state.cards.cards);
 	const login = useSelector((state) => state.login);
 	const filter = useSelector(getFilter);
+	const [isloading, setLoading] = useState(false);
 
 	const filteredCards = useSelector((state) => state.cards.filteredCards);
 
@@ -21,9 +22,13 @@ const Cards = () => {
 			dispatch(
 				updateOrder({ token: login.token, user: login.user, item: card })
 			) &&
-			dispatch(setLoginTotal)) ||
-			dispatch(addToCart(card));
+			dispatch(setLoginTotal) &&
+			setLoading(!isloading)) ||
+			(setLoading(!isloading) && dispatch(addToCart(card)));
 	};
+	React.useEffect(() => {
+		isloading && setTimeout(() => setLoading(!isloading), 500);
+	}, [isloading]);
 
 	React.useEffect(() => {
 		dispatch(changeFilter(filter));
@@ -100,14 +105,18 @@ const Cards = () => {
 								</div>
 							</div>
 							<div className="cart-button-flex">
-								<button
-									className="add-to-cart-button"
-									onClick={() =>
-										handleAddToCart({ card: card, qty: 1, price: card.price })
-									}
-								>
-									Add to Cart
-								</button>
+								{isloading ? (
+									<TailSpin stroke="#f0b326" strokeWidth="3" />
+								) : (
+									<button
+										className="add-to-cart-button"
+										onClick={() =>
+											handleAddToCart({ card: card, qty: 1, price: card.price })
+										}
+									>
+										Add to Cart
+									</button>
+								)}
 							</div>
 						</div>
 					</div>

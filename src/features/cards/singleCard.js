@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import React, { useState } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchSingleCard } from './cardsSlice';
 import { addToCart, setLoginTotal, updateOrder } from '../cart/cartSlice';
@@ -10,24 +10,31 @@ const SingleCard = () => {
 	const dispatch = useDispatch();
 	const { id } = useParams();
 	const login = useSelector((state) => state.login);
-	const [loading, setLoading] = useState(false);
+	const [isloadingCard, setLoadingCard] = useState(false);
+	const [isloading, setLoading] = useState(false);
 
 	React.useEffect(() => {
 		dispatch(fetchSingleCard(id));
-		setTimeout(() => setLoading(true), 500);
+		setTimeout(() => setLoadingCard(!isloadingCard), 500);
 	}, []);
 
 	const card = useSelector((state) => state.cards.singleCard);
+
 	const handleAddToCart = (card) => {
 		(login.loggedIn &&
 			dispatch(
 				updateOrder({ token: login.token, user: login.user, item: card })
 			) &&
-			dispatch(setLoginTotal)) ||
-			dispatch(addToCart(card));
+			dispatch(setLoginTotal) &&
+			setLoading(!isloading)) ||
+			(setLoading(!isloading) && dispatch(addToCart(card)));
 	};
 
-	return !loading ? (
+	React.useEffect(() => {
+		isloading && setTimeout(() => setLoading(!isloading), 500);
+	}, [isloading]);
+
+	return !isloadingCard ? (
 		<div className="all-cards-container">
 			<TailSpin stroke="#f0b326" strokeWidth="3" />
 		</div>
@@ -67,14 +74,18 @@ const SingleCard = () => {
 					</div>
 				</div>
 				<div className="cart-button-flex">
-					<button
-						className="single-add-to-cart-button"
-						onClick={() =>
-							handleAddToCart({ card: card, qty: 1, price: card.price })
-						}
-					>
-						Add to cart
-					</button>
+					{isloading ? (
+						<TailSpin stroke="#f0b326" strokeWidth="3" />
+					) : (
+						<button
+							className="single-add-to-cart-button"
+							onClick={() =>
+								handleAddToCart({ card: card, qty: 1, price: card.price })
+							}
+						>
+							Add to cart
+						</button>
+					)}
 				</div>
 			</div>
 		</div>
