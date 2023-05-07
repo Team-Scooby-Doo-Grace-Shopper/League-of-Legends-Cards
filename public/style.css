@@ -685,7 +685,7 @@ body {
 
 	  .single-card-image {
 		margin-top: 5vh;
-		max-width: 100vw;
+		width: 100vw;
 		margin-bottom: 5vh;
 	  }
 }
