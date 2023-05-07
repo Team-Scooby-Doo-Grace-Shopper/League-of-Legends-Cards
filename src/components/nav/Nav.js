@@ -8,16 +8,14 @@ const Nav = () => {
 	return (
 		<div className="nav">
 			<nav className="nav-bar">
-				<Link className="nav-link" to="/cards">
-					Cards
+				<Link to="/cards">
+					<div className="nav-link">Cards</div>
 				</Link>
-				<Link className="nav-link" to="/profile">
-					{' '}
-					Profile{' '}
+				<Link to="/profile">
+					<div className="nav-link">Profile</div>
 				</Link>
-				<Link className="nav-link" to="/cart">
-					{' '}
-					Cart {totalItem > 0 ? `( ${totalItem} )` : ''}
+				<Link to="/cart">
+					<div className="nav-link">Cart {totalItem > 0 ? `( ${totalItem} )` : ''}</div>
 				</Link>
 			</nav>
 		</div>
