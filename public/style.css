@@ -688,4 +688,9 @@ body {
 		width: 100vw;
 		margin-bottom: 5vh;
 	  }
+
+	  .single-card-info {
+		width: 100%;
+		background: none;
+	  }
 }
